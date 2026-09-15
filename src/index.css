@@ -1,0 +1,931 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #172554;
+  background: #eef7ff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 0%, #ffffff 0, #f3f9ff 46%, #eaf4ff 100%);
+}
+
+button {
+  font: inherit;
+}
+
+.game-container {
+  width: min(1500px, 96vw);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px 0 36px;
+}
+
+.game-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 0 0 22px;
+  color: #172b4d;
+  font-size: clamp(1.35rem, 2.5vw, 2.2rem);
+  font-weight: 900;
+  letter-spacing: 0.045em;
+  text-align: center;
+}
+
+.game-title span {
+  font-size: 0.85em;
+}
+
+/* =========================
+   THREE-PANEL LAYOUT
+========================= */
+
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.86fr) minmax(480px, 1.72fr) minmax(230px, 0.86fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+/* =========================
+   CALCULATOR
+========================= */
+
+.calculator-card {
+  overflow: hidden;
+  align-self: stretch;
+  border: 1px solid #d5e2ef;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(35, 76, 115, 0.1);
+}
+
+.calculator-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 50px;
+  padding: 10px 17px;
+  color: #fff;
+  font-weight: 800;
+}
+
+.calculator-card.blue .calculator-header {
+  background: linear-gradient(135deg, #09a7df, #0a91d3);
+}
+
+.calculator-card.red .calculator-header {
+  background: linear-gradient(135deg, #ff1010, #ee0000);
+}
+
+.calculator-header strong {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  color: #12305b;
+  font-size: 0.9rem;
+}
+
+.calculator-content {
+  padding: 20px 18px 18px;
+}
+
+.question {
+  margin-bottom: 14px;
+  color: #142b4d;
+  font-size: clamp(1.2rem, 2vw, 1.55rem);
+  font-weight: 850;
+  text-align: center;
+}
+
+.display {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 42px;
+  margin-bottom: 14px;
+  padding: 0 14px;
+  overflow: hidden;
+  border: 1px solid #cbd9e7;
+  border-radius: 10px;
+  background: #f7fafc;
+  color: #142b4d;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.key {
+  min-height: 51px;
+  border: 1px solid #d3e0ec;
+  border-radius: 10px;
+  background: #fff;
+  color: #13294b;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 650;
+  box-shadow: 0 2px 4px rgba(32, 67, 100, 0.03);
+  transition: transform 100ms ease, background 150ms ease, box-shadow 150ms ease;
+}
+
+.key:hover {
+  background: #f2f7fb;
+  box-shadow: 0 4px 10px rgba(32, 67, 100, 0.08);
+}
+
+.key:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.key:focus-visible {
+  outline: 3px solid #7dd3fc;
+  outline-offset: 2px;
+}
+
+.key.clear {
+  background: #f00000;
+  border-color: #f00000;
+  color: #fff;
+}
+
+.key.submit {
+  background: #0b8ed0;
+  border-color: #0b8ed0;
+  color: #fff;
+}
+
+/* =========================
+   ARENA
+========================= */
+
+.arena {
+  position: relative;
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid #d5e2ef;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(35, 76, 115, 0.1);
+}
+
+.arena-header {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 58px;
+  padding: 0 20px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #58708d;
+  font-weight: 750;
+}
+
+.arena-header span:last-child {
+  text-align: right;
+}
+
+.team-label-blue {
+  color: #1581c4;
+}
+
+.team-label-red {
+  color: #dc252c;
+}
+
+.timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #087fca;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #0b93d2;
+}
+
+.arena-field {
+  position: relative;
+  min-height: 462px;
+  height: calc(100% - 58px);
+  overflow: hidden;
+  background:
+    linear-gradient(to bottom, rgba(157, 220, 251, 0.8), rgba(226, 246, 255, 0.65) 67%, #fff 67%);
+}
+
+/* Simple cloud shapes keep the arena lightweight and scalable. */
+.cloud {
+  position: absolute;
+  height: 34px;
+  width: 100px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+  filter: blur(0.2px);
+}
+
+.cloud::before,
+.cloud::after {
+  position: absolute;
+  content: "";
+  border-radius: 50%;
+  background: inherit;
+}
+
+.cloud::before {
+  left: 17px;
+  bottom: 10px;
+  width: 42px;
+  height: 42px;
+}
+
+.cloud::after {
+  left: 49px;
+  bottom: 5px;
+  width: 52px;
+  height: 52px;
+}
+
+.cloud-one {
+  top: 48px;
+  left: 5%;
+  transform: scale(0.75);
+}
+
+.cloud-two {
+  top: 90px;
+  right: 5%;
+  transform: scale(0.95);
+}
+
+.cloud-three {
+  top: 140px;
+  left: 41%;
+  transform: scale(0.6);
+}
+
+.center-line {
+  position: absolute;
+  z-index: 0;
+  top: 20px;
+  bottom: 18px;
+  left: 50%;
+  border-left: 2px dashed rgba(99, 134, 166, 0.42);
+}
+
+.ground-shadow {
+  position: absolute;
+  z-index: 1;
+  bottom: 48px;
+  width: 31%;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(86, 99, 113, 0.13);
+  filter: blur(2px);
+}
+
+.shadow-left {
+  left: 5%;
+}
+
+.shadow-right {
+  right: 5%;
+}
+
+/* =========================
+   AVIATOR CHARACTERS
+========================= */
+
+.team {
+  position: absolute;
+  z-index: 4;
+  top: 52%;
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  transform: translateY(-50%);
+}
+
+.team-left {
+  left: 16.5%;
+}
+
+.team-right {
+  right: 16.5%;
+}
+
+.team {
+  transition: transform 360ms cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.aviator {
+  display: block;
+  width: clamp(82px, 8vw, 112px);
+  height: auto;
+  transform-origin: 65% 60%;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 7px 4px rgba(31, 52, 74, 0.13));
+}
+
+.aviator-one {
+  transform: rotate(-2deg) translateY(4px);
+}
+
+.team-right .aviator-one {
+  transform: scaleX(-1) rotate(-2deg) translateY(4px);
+}
+
+/* Rope stays behind the hands/body to match the illustrated reference. */
+.rope {
+  position: absolute;
+  z-index: 3;
+  top: 52%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  width: 67%;
+  pointer-events: none;
+  transition: transform 360ms cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.rope-line {
+  width: 100%;
+  height: 7px;
+  border-radius: 999px;
+  background:
+    repeating-linear-gradient(
+      12deg,
+      #a95515 0 6px,
+      #d78331 6px 10px
+    );
+  box-shadow: 0 2px 2px rgba(71, 43, 22, 0.2);
+}
+
+.rope-marker {
+  position: absolute;
+  left: 50%;
+  display: grid;
+  width: 18px;
+  height: 29px;
+  place-items: center;
+  transform: translateX(-50%);
+  color: #e71b2a;
+  font-size: 24px;
+  line-height: 1;
+}
+
+/* =========================
+   CELEBRATION
+========================= */
+
+.celebration-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 24px;
+  background: rgba(12, 35, 65, 0.78);
+  backdrop-filter: blur(4px);
+  animation: backdrop-in 220ms ease-out both;
+}
+
+.celebration-card {
+  position: relative;
+  width: min(620px, 94vw);
+  padding: 30px 32px 26px;
+  border: 4px solid #dcecff;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 0%, #fff 0, #f7fbff 65%, #eef7ff 100%);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.28);
+  text-align: center;
+  animation: celebration-pop 420ms cubic-bezier(0.2, 1.25, 0.35, 1) both;
+}
+
+.celebration-card.blue {
+  border-color: #8bd3fa;
+}
+
+.celebration-card.red {
+  border-color: #ff9696;
+}
+
+.trophy {
+  font-size: 4rem;
+  line-height: 1;
+  animation: trophy-bounce 900ms ease-in-out infinite alternate;
+}
+
+.celebration-kicker {
+  margin: 9px 0 3px;
+  color: #6c82a0;
+  font-size: 0.78rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+}
+
+.celebration-card h2 {
+  margin: 0;
+  color: #096fbe;
+  font-size: clamp(2rem, 6vw, 3.15rem);
+  line-height: 1.05;
+}
+
+.celebration-card.red h2 {
+  color: #e2252f;
+}
+
+.celebration-message {
+  margin: 12px 0 18px;
+  color: #314866;
+  font-weight: 550;
+}
+
+.celebration-characters {
+  position: absolute;
+  left: -56px;
+  bottom: -16px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.celebration-character {
+  width: 96px;
+  filter: drop-shadow(0 6px 4px rgba(0, 0, 0, 0.14));
+}
+
+.celebration-character.second {
+  margin-left: -25px;
+  transform: translateY(-12px) scale(0.9);
+}
+
+.final-score {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 auto 18px;
+  max-width: 430px;
+}
+
+.final-score-team {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 800;
+}
+
+.final-score-team.team-one {
+  background: #138cda;
+}
+
+.final-score-team.team-two {
+  background: #ed2632;
+}
+
+.final-score-team strong {
+  font-size: 1.45rem;
+}
+
+.score-dash {
+  color: #61738a;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.celebration-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.primary-action,
+.secondary-action {
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 100ms ease, box-shadow 150ms ease;
+}
+
+.primary-action {
+  border: 0;
+  background: #0d91db;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(13, 145, 219, 0.25);
+}
+
+.secondary-action {
+  border: 1px solid #c8d8e8;
+  background: #fff;
+  color: #183354;
+}
+
+.primary-action:hover,
+.secondary-action:hover {
+  transform: translateY(-1px);
+}
+
+.sound-status {
+  margin-top: 14px;
+  color: #70829a;
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.confetti-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confetti {
+  position: absolute;
+  top: -18px;
+  left: var(--left);
+  width: 10px;
+  height: 18px;
+  border-radius: 2px;
+  background: #16a3e0;
+  opacity: 0.95;
+  animation: confetti-fall var(--duration) linear var(--delay) infinite;
+}
+
+.confetti:nth-child(3n) {
+  background: #f7b731;
+}
+
+.confetti:nth-child(3n + 1) {
+  background: #ef3e68;
+}
+
+.confetti:nth-child(4n) {
+  width: 7px;
+  height: 12px;
+}
+
+@keyframes backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes celebration-pop {
+  from { opacity: 0; transform: translateY(20px) scale(0.82); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes trophy-bounce {
+  from { transform: translateY(0) rotate(-3deg); }
+  to { transform: translateY(-7px) rotate(3deg); }
+}
+
+@keyframes confetti-fall {
+  from {
+    transform: translate3d(0, -30px, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(0, 110vh, 0) rotate(540deg);
+  }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .game-layout {
+    grid-template-columns: minmax(200px, 0.8fr) minmax(390px, 1.5fr) minmax(200px, 0.8fr);
+    gap: 10px;
+  }
+
+  .calculator-content {
+    padding: 14px 12px;
+  }
+
+  .key {
+    min-height: 46px;
+  }
+
+  .aviator {
+    width: clamp(96px, 10vw, 130px);
+  }
+}
+
+@media (max-width: 820px) {
+  .game-container {
+    width: min(94vw, 620px);
+  }
+
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .arena {
+    order: -1;
+    min-height: 430px;
+  }
+
+  .arena-field {
+    min-height: 370px;
+  }
+
+  .team-left {
+    left: 12%;
+  }
+
+  .team-right {
+    right: 12%;
+  }
+
+  .aviator {
+    width: 96px;
+  }
+
+  .rope {
+    width: 76%;
+  }
+
+  .celebration-characters {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-container {
+    padding-top: 16px;
+  }
+
+  .game-title {
+    gap: 7px;
+    font-size: 1.2rem;
+  }
+
+  .arena-header {
+    padding: 0 10px;
+  }
+
+  .team {
+    gap: 0;
+  }
+
+  .aviator {
+    width: 82px;
+  }
+
+  .final-score {
+    gap: 5px;
+  }
+
+  .final-score-team {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .celebration-card {
+    padding: 24px 15px 20px;
+  }
+
+  .celebration-actions {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* =========================
+   CALCULATOR INTERACTION
+========================= */
+
+.calculator-card:focus-visible {
+  outline: 3px solid #7dd3fc;
+  outline-offset: 3px;
+}
+
+.key:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.key:disabled:hover {
+  background: inherit;
+  box-shadow: none;
+}
+
+.display.correct {
+  border-color: #22c55e;
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.display.incorrect {
+  border-color: #ef4444;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.answer-feedback {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:24px;
+  margin:8px 0 0;
+  font-size:.86rem;
+  font-weight:850;
+  text-align:center;
+  opacity:0;
+}
+.answer-feedback:not(:empty) { animation:answer-feedback-in 500ms ease-out both; }
+
+.answer-feedback.correct {
+  color: #15803d;
+}
+
+.answer-feedback.incorrect {
+  color: #b91c1c;
+}
+
+.submitted-label {
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* =========================
+   ROUND STATUS / QUESTION FLOW
+========================= */
+
+.round-status {
+  position: absolute;
+  z-index: 6;
+  top: 63px;
+  left: 50%;
+  min-height: 34px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: #607894;
+  font-size: 0.82rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.next-question-button {
+  pointer-events: auto;
+  min-height: 34px;
+  padding: 6px 15px;
+  border: 0;
+  border-radius: 999px;
+  background: #0b8ed0;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 800;
+  box-shadow: 0 5px 12px rgba(11, 142, 208, 0.22);
+  transition: transform 100ms ease, background 150ms ease;
+}
+
+.next-question-button:hover {
+  background: #087db8;
+  transform: translateY(-1px);
+}
+
+.next-question-button:focus-visible {
+  outline: 3px solid #7dd3fc;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .round-status {
+    top: 61px;
+    font-size: 0.72rem;
+  }
+
+  .next-question-button {
+    min-height: 31px;
+    padding: 5px 12px;
+  }
+}
+
+/* =========================
+   INDEPENDENT TEAM TIMERS
+========================= */
+
+.timer-strip {
+  position: absolute;
+  z-index: 8;
+  right: 14px;
+  bottom: 12px;
+  left: 14px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid rgba(184, 210, 231, 0.9);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 5px 18px rgba(45, 83, 117, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.team-timer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 95px;
+  padding: 6px 9px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.team-timer.blue {
+  color: #087ab9;
+  background: #e7f6ff;
+}
+
+.team-timer.red {
+  color: #d51f29;
+  background: #fff0f1;
+}
+
+.team-timer strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.team-timer.warning {
+  animation: timer-warning 700ms ease-in-out infinite alternate;
+}
+
+.timer-help {
+  color: #71859b;
+  font-size: 0.7rem;
+  font-weight: 650;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@keyframes timer-warning {
+  from { transform: scale(1); }
+  to { transform: scale(1.04); }
+}
+
+@media (max-width: 820px) {
+  .timer-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .timer-help {
+    display: none;
+  }
+}
+
