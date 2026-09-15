@@ -18,6 +18,7 @@ interface CalculatorProps {
 const DIGITS = ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
 export function Calculator({
+  teamId: _teamId,
   teamName,
   score,
   color,
@@ -76,14 +77,18 @@ export function Calculator({
         >
           {displayValue}
         </div>
-<div className="keypad" aria-label={`${teamName} keypad`}>
+
+        <div className="keypad" aria-label={`${teamName} keypad`}>
           {DIGITS.map((digit) => (
             <button
               key={digit}
               type="button"
               className="key"
               disabled={submitted}
-              onClick={() => onDigit(digit)}
+              onPointerDown={(e) => {
+                e.preventDefault();
+                if (!submitted) onDigit(digit);
+              }}
               aria-label={`Enter ${digit}`}
             >
               {digit}
@@ -94,7 +99,10 @@ export function Calculator({
             type="button"
             className="key action clear"
             disabled={submitted}
-            onClick={onClear}
+            onPointerDown={(e) => {
+              e.preventDefault();
+              if (!submitted) onClear();
+            }}
             aria-label={`Clear ${teamName} answer`}
           >
             ×
@@ -104,7 +112,10 @@ export function Calculator({
             type="button"
             className="key"
             disabled={submitted}
-            onClick={() => onDigit("0")}
+            onPointerDown={(e) => {
+              e.preventDefault();
+              if (!submitted) onDigit("0");
+            }}
             aria-label="Enter 0"
           >
             0
@@ -114,13 +125,15 @@ export function Calculator({
             type="button"
             className="key action submit"
             disabled={submitted || answer.length === 0}
-            onClick={onSubmit}
+            onPointerDown={(e) => {
+              e.preventDefault();
+              if (!submitted && answer.length > 0) onSubmit();
+            }}
             aria-label={`Submit ${teamName} answer`}
           >
             ✓
           </button>
         </div>
-
 
         <div
           className={`answer-feedback ${answerStatus}`}
@@ -132,7 +145,8 @@ export function Calculator({
             : answerStatus === "incorrect"
               ? "✕ Incorrect!"
               : ""}
-        </div></div>
+        </div>
+      </div>
     </section>
   );
 }
