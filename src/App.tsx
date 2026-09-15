@@ -38,6 +38,9 @@ function createInitialGameState(): GameState {
 function App() {
   const [game, dispatch] = useReducer(gameReducer, undefined, createInitialGameState);
 
+  // Define team IDs with explicit TeamId[] type to avoid implicit string indexing errors
+  const teamIds: TeamId[] = ["team1", "team2"];
+
   // Each team owns its own one-second timer. A submission or timeout resets only
   // that team's timer and question; the other team continues uninterrupted.
   useEffect(() => {
@@ -52,9 +55,9 @@ function App() {
   }, [game.winner]);
 
   useEffect(() => {
-    const submittedTeams: TeamId[] = ["team1", "team2"].filter(
+    const submittedTeams = teamIds.filter(
       (teamId) => game.teams[teamId].submitted,
-    ) as TeamId[];
+    );
 
     if (game.winner || submittedTeams.length === 0) return;
 
@@ -66,7 +69,6 @@ function App() {
 
     return () => timers.forEach((timer) => window.clearTimeout(timer));
   }, [game.winner, game.teams.team1.submitted, game.teams.team2.submitted]);
-
 
   return (
     <GameBoard
