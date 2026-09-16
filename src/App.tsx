@@ -39,7 +39,7 @@ function App() {
   const [game, dispatch] = useReducer(gameReducer, undefined, createInitialGameState);
   const teamIds: TeamId[] = ["team1", "team2"];
 
-  // New Game Status State
+  // Game Status State
   const [appStatus, setAppStatus] = useState<"idle" | "countdown" | "playing">("idle");
   const [countdown, setCountdown] = useState(5);
 
@@ -56,42 +56,77 @@ function App() {
     return () => window.clearTimeout(timer);
   }, [appStatus, countdown]);
 
-  // 2. Handle Physical Keyboards (Only active when playing)
+  // 2. Physical Keyboard Listener (Isolated per team to prevent double inputs and leaks)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      // Prevent input if game hasn't fully started or is over
+      // Ignore keypresses if the game isn't active
       if (appStatus !== "playing" || game.winner) return;
 
-      // PLAYER 1 / TEAM 1 (Top Row Digits & Keys)
+      // Blur active elements so physical keyboard events don't trigger focused UI elements twice
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+
+      // ===================================================
+      // TEAM 1: Top-Row Numbers (Digit1-Digit0), Enter, Backspace
+      // ===================================================
       if (!game.teams.team1.submitted) {
         if (/^Digit[0-9]$/.test(event.code)) {
+          event.preventDefault();
+          event.stopPropagation();
           const digit = event.code.replace("Digit", "");
           dispatch({ type: "INPUT_DIGIT", teamId: "team1", digit });
-        } else if (event.code === "Enter") {
+          return;
+        } 
+        
+        if (event.code === "Enter") {
+          event.preventDefault();
+          event.stopPropagation();
           dispatch({ type: "SUBMIT_ANSWER", teamId: "team1" });
-        } else if (event.code === "Backspace") {
+          return;
+        } 
+        
+        if (event.code === "Backspace") {
+          event.preventDefault();
+          event.stopPropagation();
           dispatch({ type: "CLEAR_ANSWER", teamId: "team1" });
+          return;
         }
       }
 
-      // PLAYER 2 / TEAM 2 (Numpad Keys)
+      // ===================================================
+      // TEAM 2: Numpad Keys (Numpad0-Numpad9), NumpadEnter, Delete
+      // ===================================================
       if (!game.teams.team2.submitted) {
         if (/^Numpad[0-9]$/.test(event.code)) {
+          event.preventDefault();
+          event.stopPropagation();
           const digit = event.code.replace("Numpad", "");
           dispatch({ type: "INPUT_DIGIT", teamId: "team2", digit });
-        } else if (event.code === "NumpadEnter") {
+          return;
+        } 
+        
+        if (event.code === "NumpadEnter") {
+          event.preventDefault();
+          event.stopPropagation();
           dispatch({ type: "SUBMIT_ANSWER", teamId: "team2" });
-        } else if (event.code === "NumpadSubtract" || event.code === "Delete") {
+          return;
+        } 
+        
+        if (event.code === "NumpadSubtract" || event.code === "Delete") {
+          event.preventDefault();
+          event.stopPropagation();
           dispatch({ type: "CLEAR_ANSWER", teamId: "team2" });
+          return;
         }
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown, true);
+    return () => window.removeEventListener("keydown", handleKeyDown, true);
   }, [appStatus, game.winner, game.teams.team1.submitted, game.teams.team2.submitted]);
 
-  // 3. Question Timer (Only active when playing)
+  // 3. Question Timer
   useEffect(() => {
     if (appStatus !== "playing" || game.winner) return;
 
@@ -129,7 +164,7 @@ function App() {
         onSubmit={(teamId) => dispatch({ type: "SUBMIT_ANSWER", teamId })}
         onReset={() => {
           dispatch({ type: "RESET_GAME" });
-          setAppStatus("idle"); // Send back to start screen when resetting
+          setAppStatus("idle");
         }}
       />
 
